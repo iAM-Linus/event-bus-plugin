@@ -1,6 +1,6 @@
 ## Overview
 
-The Event Bus plugin provides a centralized event management system for Godot 4.3 projects. It allows nodes to communicate with each other by emitting and listening to events without needing direct references, promoting decoupled and maintainable code architecture.
+The Event Bus plugin provides a centralized event management system for Godot 4 projects. It allows nodes to communicate with each other by emitting and listening to events without needing direct references, promoting decoupled and maintainable code architecture.
 
 ## Features
 
