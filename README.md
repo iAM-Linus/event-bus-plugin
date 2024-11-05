@@ -10,7 +10,6 @@ The Event Bus plugin provides a centralized event management system for Godot 4.
 - **Event Subscription**: Nodes can subscribe to events of interest.
 - **In-Game Event Overview**: A toggleable UI to monitor events and listeners in real-time during gameplay.
 - **Event Data Persistence**: Event and listener data are saved and can be reviewed after gameplay.
-- **Editor Integration**: An Event Bus Overview panel in the editor to review event data.
 
 ## Installation
 
@@ -100,13 +99,6 @@ for event_name in all_events:
     var listeners = EventBus.get_listeners_for_event(event_name)
     print("Event:", event_name, "Listeners:", listeners)
 ```
-
-### Event Bus Overview in the Editor
-
-After running your game and generating event data, you can review it in the editor:
-
-- Open the **Event Bus Overview** panel, which is added by the plugin.
-- It displays the events, listeners, and emit history saved during the last gameplay session.
 
 ## Advanced Features
 
