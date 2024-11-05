@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnyrqvdnuw4l2"]
+
+[ext_resource type="Script" path="res://addons/event_bus_plugin/EventBusInGameOverview.gd" id="1_tuyuc"]
+[ext_resource type="Script" path="res://addons/event_bus_plugin/drag_panel.gd" id="2_1x4qa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3ar6"]
+bg_color = Color(0.830335, 0.830335, 0.830335, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vwb3j"]
+content_margin_left = 5.0
+content_margin_bottom = 5.0
+
+[node name="EventBusInGameOverview" type="CanvasLayer"]
+script = ExtResource("1_tuyuc")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(450, 350)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_j3ar6")
+script = ExtResource("2_1x4qa")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vwb3j")
+follow_focus = true
+vertical_scroll_mode = 2
+
+[node name="ContentContainer" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Close"

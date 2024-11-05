@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://dgkg7r3va6p41"]
+
+[ext_resource type="FontFile" uid="uid://cl05hfex3id46" path="res://addons/event_bus_plugin/fonts/monogram.ttf" id="1_2kfit"]
+
+[resource]
+font = ExtResource("1_2kfit")
+font_size = 22
+font_color = Color(0.212305, 0.212305, 0.212305, 1)
