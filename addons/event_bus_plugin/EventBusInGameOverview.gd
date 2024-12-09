@@ -10,6 +10,7 @@ var label_settings: LabelSettings = preload("res://addons/event_bus_plugin/fonts
 
 # Timer for periodic updates of the overview
 var timer: Timer
+var is_updating: bool = false
 
 # Visibility flag for the overview UI
 var is_visible := false:
@@ -29,6 +30,8 @@ func _ready() -> void:
 	timer.one_shot = false
 	timer.wait_time = 2.0
 	add_child(timer)
+	
+	update_overview()	
 
 func _process(delta: float) -> void:
 	# Wait for the timer timeout signal to update the overview
@@ -49,47 +52,54 @@ func hide_overview() -> void:
 	set_visibility(false)
 
 func update_overview() -> void:
-	# Clear existing content in the overview
-	for child in content_container.get_children():
-		child.queue_free()
-	
-	# Display the list of listeners
-	var listeners_label: Label = Label.new()
-	listeners_label.label_settings = label_settings
-	listeners_label.text = "Listeners:"
-	content_container.add_child(listeners_label)
-
-	var events = EventBus.get_all_events()
-	for event_name in events:
-		var event_label = Label.new()
-		event_label.label_settings = label_settings
-		event_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		event_label.text = "- Event: " + event_name
-		content_container.add_child(event_label)
+	if not is_updating:
+		is_updating = true
+		# Clear existing content in the overview
+		for child in content_container.get_children():
+			child.queue_free()
 		
-		var listeners = EventBus.get_listeners_for_event(event_name)
-		for listener_info in listeners:
-			var object_name = listener_info.get("object_name", "<Unknown>")
-			var method_name = listener_info.get("method_name", "<Unknown>")
-			var listener_label: Label = Label.new()
-			listener_label.label_settings = label_settings
-			listener_label.text = "    - Listener: %s.%s" % [object_name, method_name]
-			content_container.add_child(listener_label)
-
-	# Display the emit history
-	var history_label: Label = Label.new()
-	history_label.label_settings = label_settings
-	history_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	history_label.text = "\nEmit History:"
-	content_container.add_child(history_label)
-
-	var emit_history = EventBus.get_emit_history()
-	for record in emit_history:
-		var timestamp = record["timestamp"]
-		var datetime = Time.get_datetime_dict_from_unix_time(timestamp)
-		var time_str = "%02d:%02d:%02d" % [datetime.hour, datetime.minute, datetime.second]
-		var emit_label: Label = Label.new()
-		emit_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		emit_label.label_settings = label_settings
-		emit_label.text = "[%s] Event: %s Args: %s" % [time_str, record["event_name"], record["args"]]
-		content_container.add_child(emit_label)
+		# Display the list of listeners
+		var listeners_label: Label = Label.new()
+		listeners_label.label_settings = label_settings
+		listeners_label.text = "Listeners:"
+		content_container.add_child(listeners_label)
+	
+		var events = EventBus.get_all_events()
+		for event_name in events:
+			var event_label = Label.new()
+			event_label.label_settings = label_settings
+			event_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			event_label.text = "- Event: " + event_name
+			content_container.add_child(event_label)
+			
+			var listeners = EventBus.get_listeners_for_event(event_name)
+			for listener_info in listeners:
+				var object_name = listener_info.get("object_name", "<Unknown>")
+				var method_name = listener_info.get("method_name", "<Unknown>")
+				var listener_label: Label = Label.new()
+				listener_label.label_settings = label_settings
+				listener_label.text = "    - Listener: %s.%s" % [object_name, method_name]
+				content_container.add_child(listener_label)
+	
+		# Display the emit history
+		var history_label: Label = Label.new()
+		history_label.label_settings = label_settings
+		history_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		history_label.text = "\nEmit History:"
+		content_container.add_child(history_label)
+	
+		var emit_history = EventBus.get_emit_history()
+		for record in emit_history:
+			var timestamp = record["timestamp"]
+			var datetime = Time.get_datetime_dict_from_unix_time(timestamp)
+			var time_str = "%02d:%02d:%02d" % [datetime.hour, datetime.minute, datetime.second]
+			var emit_label: Label = Label.new()
+			emit_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			emit_label.label_settings = label_settings
+			emit_label.text = "[%s] Event: %s Args: %s" % [time_str, record["event_name"], record["args"]]
+			content_container.add_child(emit_label)
+		
+		await timer.timeout
+		is_updating = false
+		update_overview()
+		print("Overview updated")
