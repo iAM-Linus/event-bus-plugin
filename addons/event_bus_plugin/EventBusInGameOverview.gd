@@ -33,11 +33,6 @@ func _ready() -> void:
 	
 	update_overview()	
 
-func _process(delta: float) -> void:
-	# Wait for the timer timeout signal to update the overview
-	await timer.timeout
-	update_overview()
-
 func set_visibility(value: bool) -> void:
 	# Set the visibility of the overview UI
 	is_visible = value
